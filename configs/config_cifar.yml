@@ -1,0 +1,87 @@
+trainer:
+  _target_: pytorch_lightning.trainer.trainer.Trainer
+  _partial_: true
+  max_epochs: 30
+  amp_backend: apex
+  amp_level: O3
+  logger:
+    _target_: pytorch_lightning.loggers.TensorBoardLogger
+    save_dir: tb_logs
+    name: cifar10_train
+
+datamodule:
+  _target_: data.datamodules.LitDataloadersContainer
+  train_dataloader:
+    _target_: torch.utils.data.DataLoader
+    batch_size: 256
+    num_workers: 4
+    prefetch_factor: 4
+    dataset:
+      _target_: torchvision.datasets.ImageFolder
+      root: path/to/cifar10/train
+      transform: 
+        _target_: torchvision.transforms.Compose
+        transforms:
+          - _target_: torchvision.transforms.ToTensor
+          - _target_: torchvision.transforms.RandomHorizontalFlip
+          - _target_: torchvision.transforms.Normalize
+            mean: 
+              - 0.49139968
+              - 0.48215827
+              - 0.44653124
+            std:
+              - 0.24703233
+              - 0.24348505
+              - 0.26158768
+
+  val_dataloader:
+    _target_: torch.utils.data.DataLoader
+    batch_size: 256
+    dataset:
+      _target_: torchvision.datasets.ImageFolder
+      root: path/to/cifar10/train
+      transform: 
+        _target_: torchvision.transforms.Compose
+        transforms:
+          - _target_: torchvision.transforms.RandomCrop
+            size: 32
+            padding: 4
+          - _target_: torchvision.transforms.ToTensor
+          - _target_: torchvision.transforms.Normalize
+            mean: 
+              - 0.49139968 
+              - 0.48215827
+              - 0.44653124
+            std:
+              - 0.24703233
+              - 0.24348505
+              - 0.26158768
+module:
+  _target_: models.LitModel
+  model:
+    _target_: models.resnet18_cifar10
+    
+  optimizer_config:
+    optimizer:
+      _target_: torch.optim.Adam
+      _partial_: True
+      lr: 0.05
+    lr_scheduler:
+      scheduler:
+        _target_: torch.optim.lr_scheduler.StepLR
+        _partial_: True
+        step_size: 10
+        # max_lr: 0.1
+        # steps_per_epoch: 10
+        # epochs: 30
+      interval: epoch
+
+  loss_function:
+    _target_: torch.nn.CrossEntropyLoss
+  val_step_metrics:
+    - val_loss:
+        _target_: torch.nn.functional.cross_entropy
+        _partial_: True
+    - val_accuracy:
+        _target_: torchmetrics.functional.accuracy
+        _partial_: True
