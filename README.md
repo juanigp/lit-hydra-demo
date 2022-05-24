@@ -19,7 +19,7 @@ The configuration of the experiment is handled with Hydra configurations (https:
 
 Now, for example, our DataModule object requires some DataLoader object, and to construct a DataLoader we need a Dataset object, and for this dataset maybe we want to specify some transformation! All this nested instantiation of objects can be specified in the .yml without writing extra code. For a classification task, we can specify all the objects that we need and their arguments and hyperparameters in our configuration file, and Hydra will handle their instantiation.
 
-### Running:
+## Running:
 Currently there is no env, but the basic requirements are PyTorch, PyTorch Lightning and Hydra/hydra-zen.
 
 You can run `$ python3 train.py -cp configs -cn config_cifar.yml`. 
