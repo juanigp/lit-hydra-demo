@@ -2,7 +2,7 @@
 A concept for using PyTorch Lightning + Hydra
 
 ## Explanation
-The idea is to have a easy way to configure PL's Trainer, Module, and a DataModule (https://www.pytorchlightning.ai/), illustrated with CIFAR10 classification.
+The idea is to have an easy way to configure a PL's Trainer, Module, and DataModule (https://www.pytorchlightning.ai/), illustrated with CIFAR10 classification.
 
 ### Module:
 A PL Module is basically a model plus some code to configure its optimizer, define training and validation step, etc. For a regular classification task, what a Module should do is pretty well established, and we just have some decision choices, like what NN to use, which metric to optimize, the optimizer and its hyperparams, and so on.
