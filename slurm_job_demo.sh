@@ -3,9 +3,8 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=4
 #SBATCH --cpus-per-task=1
-#SBATCH --output=train.txt
+#SBATCH --output=train_%j.txt
 #SBATCH --time=12:00:00
-#SBATCH --partition=excellence-exclusive
 #SBATCH --gres=gpu:4
 #SBATCH --mem=100G
 
